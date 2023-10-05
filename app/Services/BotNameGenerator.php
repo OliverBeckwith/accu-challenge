@@ -11,11 +11,22 @@ use OpenAI;
 
 class BotNameGenerator
 {
-    private Client $client;
+    private Client|null $client = null;
+
+    protected const FALLBACK_BOT_NAMES = [
+        "Gizmotron",
+        "Sparksy",
+        "Gogzilla",
+        "Crankbot",
+        "Geargrinder"
+    ];
 
     public function __construct()
     {
-        $this->client = OpenAI::client(env("OPENAI_API_KEY"));
+        $apiKey = env("OPENAI_API_KEY");
+        if (!empty($apiKey)) {
+            $this->client = OpenAI::client(env("OPENAI_API_KEY"));
+        }
     }
 
     /** Retrieve the most prevalent category from the order items */
@@ -75,7 +86,7 @@ class BotNameGenerator
         }
 
         $fallbackBotName = "Boltinator";
-        $openAiBotName = $this->generateBotNameWithOpenAI($orderCategory);
+        $openAiBotName = $this->client ? $this->generateBotNameWithOpenAI($orderCategory) : null;
 
         if ($openAiBotName) {
             //Cache for later use
