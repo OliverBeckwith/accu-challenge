@@ -11,7 +11,7 @@ class Order extends Model
 
     protected $table = 'orders';
     protected $primaryKey = 'id';
-    protected $fillable = ['customer_name'];
+    protected $fillable = ['customer_name', 'bot_name'];
 
     public function orderItems(): HasMany
     {
