@@ -30,7 +30,7 @@ class BotNameGenerator
     }
 
     /** Retrieve the most prevalent category from the order items */
-    protected function getOrderCategory(Order $order)
+    protected function getOrderCategory(Order $order): string|null
     {
         $productCategories = [];
         foreach ($order->orderItems as $orderItem) {
@@ -43,6 +43,7 @@ class BotNameGenerator
                 ...array_fill(0, $orderItem->quantity, $product->category)
             ];
         }
+        if (!count($productCategories)) return null;
 
         // Get counts for each of the categories, then reverse sort to get highest count
         $counts = array_count_values($productCategories);
@@ -86,7 +87,9 @@ class BotNameGenerator
         }
 
         $fallbackBotName = self::FALLBACK_BOT_NAMES[random_int(0, count(self::FALLBACK_BOT_NAMES) - 1)];
-        $openAiBotName = $this->client ? $this->generateBotNameWithOpenAI($orderCategory) : null;
+        $openAiBotName = $this->client && $orderCategory
+            ? $this->generateBotNameWithOpenAI($orderCategory)
+            : null;
 
         if ($openAiBotName) {
             //Cache for later use
