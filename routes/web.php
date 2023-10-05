@@ -20,3 +20,4 @@ Route::get('/', function () {
 
 Route::get('/orders', [OrderController::class, 'showOrders']);
 Route::get('/order/{id}', [OrderController::class, 'viewOrder']);
+Route::put('/order/{id}', [OrderController::class, 'updateOrder']);

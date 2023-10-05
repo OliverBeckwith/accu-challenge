@@ -9,9 +9,13 @@
         <h1 class="text-xl text-center my-2">Order {{$order->id}}</h1>
         <div class="flex flex-col py-1 px-2 my-1 border-2 rounded-md border-slate-400 bg-slate-200 hover:border-slate-700 hover:bg-slate-50">
             <strong class="">Order #{{ $order->id }}</strong>
-            <span>Customer: {{ $order->customer_name }}</span>
-            <span>Bot Name: {{ $order->getBotName() }}</span>
-            <span>Order Weight: {{ $order->getTotalWeight() }}</span>
+            <form method="POST">
+              @csrf
+              @method('PUT')
+              <span>Customer: {{ $order->customer_name }}</span>
+              <label class="block" for="bot_name">Bot Name: <input class="border-2 rounded-md border-slate-500" name="bot_name" value="{{$order->getBotName()}}" /></label>
+              <span>Order Weight: {{ $order->getTotalWeight() }}</span>
+            </form>
 
             <h2>Items</h2>
             <table>

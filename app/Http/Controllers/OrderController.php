@@ -23,4 +23,22 @@ class OrderController extends Controller
 
         return view("orders.view", ['order' => $order]);
     }
+
+    public function updateOrder(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'bot_name' => 'string',
+        ]);
+
+        $order = Order::find($id);
+
+        if (!$order) {
+            abort(404);
+        }
+
+        $order->bot_name = $validatedData['bot_name'];
+        $order->save();
+
+        return redirect("/order/$id");
+    }
 }
