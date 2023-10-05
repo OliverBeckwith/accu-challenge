@@ -14,10 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::redirect('/home', '/');
 
 Route::get('/orders', [OrderController::class, 'showOrders']);
 Route::get('/order/{id}', [OrderController::class, 'viewOrder']);
 Route::put('/order/{id}', [OrderController::class, 'updateOrder']);
+
+Auth::routes();
