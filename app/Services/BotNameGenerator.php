@@ -10,10 +10,15 @@ use OpenAI;
 
 class BotNameGenerator
 {
-    private const CLIENT = OpenAI::client(env("OPENAI_API_KEY"));
+    private Client $client;
+
+    public function __construct()
+    {
+        $this->client = OpenAI::client(env("OPENAI_API_KEY"));
+    }
 
     /** Retrieve the most prevalent category from the order items */
-    protected static function getOrderCategory(Order $order)
+    protected function getOrderCategory(Order $order)
     {
         $productCategories = [];
         foreach ($order->orderItems as $orderItem) {
@@ -35,14 +40,19 @@ class BotNameGenerator
     }
 
     /** Use OpenAI GPT 3.5 to generate an amusing bot name */
-    protected static function generateBotNameWithOpenAI(string $category): string|null
+    protected function generateBotNameWithOpenAI(string $category): string|null
     {
-        $chatResponse = self::CLIENT->chat()->create([
+        $chatResponse = $this->client->chat()->create([
             'model' => 'gpt-3.5-turbo',
-            'prompt' => "Generate a single word amusing robot name loosely based on the following category: '$category'" . PHP_EOL
-                . "(Examples: 'Boltinator', 'Nutbuster', 'Washzilla')" . PHP_EOL
-                . "Your response should only be a single word: the robot name.",
             'temperature' => 0.7, //Allow creativity
+            'messages' => [
+                [
+                    'role' => 'user',
+                    'content' => "Generate a single word amusing robot name loosely based on the specified category: '$category'." . PHP_EOL
+                    . "(Examples: 'Boltinator', 'Nutbuster', 'Washzilla')" . PHP_EOL
+                    . "Your response should only be a single word: the robot name."
+                ]
+            ],
         ]);
         $botName = null;
         foreach ($chatResponse->choices as $result) {
@@ -54,9 +64,9 @@ class BotNameGenerator
     }
 
     /** Generate a bot name for the given order */
-    public static function generate(Order $order)
+    public function generate(Order $order)
     {
-        $orderCategory = self::getOrderCategory($order);
+        $orderCategory = $this->getOrderCategory($order);
 
         $fallbackBotName = "Boltinator";
         $openAiBotName = self::generateBotNameWithOpenAI($orderCategory);

@@ -31,7 +31,8 @@ class Order extends Model
     {
         if ($this->bot_name) return $this->bot_name;
 
-        $botName = BotNameGenerator::generate($this);
+        $botGenerator = resolve(BotNameGenerator::class);
+        $botName = $botGenerator->generate($this);
         $this->bot_name = $botName;
         return $botName;
     }
