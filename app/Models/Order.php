@@ -17,4 +17,11 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function getTotalWeight()
+    {
+        return $this->orderItems->sum(
+            fn ($orderItem) => ($orderItem->weight ?? 0) * ($orderItem->quantity ?? 1)
+        );
+    }
 }
