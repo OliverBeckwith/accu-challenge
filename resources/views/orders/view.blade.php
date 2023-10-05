@@ -20,15 +20,15 @@
             <h2>Items</h2>
             <table>
               <tr>
-                <th width="20%">Product SKU</th>
-                <th width="50%">Product</th>
-                <th width="10%">Quantity</th>
-                <th width="20%">Weight</th>
+                <th class="text-left" width="20%">Product SKU</th>
+                <th class="text-left" width="50%">Product</th>
+                <th class="text-right" width="10%">Quantity</th>
+                <th class="text-right" width="20%">Weight</th>
               </tr>
               @foreach($order->orderItems as $item)
               <tr>
-                <td>{{$item->product_sku}}</td>
-                <td>{{$item->product->name}}</td>
+                <td class="text-left">{{$item->product_sku}}</td>
+                <td class="text-left">{{$item->product->name}}</td>
                 <td class="text-right">{{$item->quantity}}</td>
                 <td class="text-right">{{$item->product->weight * $item->quantity}} ({{$item->product->weight}} each)</td>
               </tr>
