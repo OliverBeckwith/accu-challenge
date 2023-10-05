@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BotName;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Env;
@@ -68,8 +69,21 @@ class BotNameGenerator
     {
         $orderCategory = $this->getOrderCategory($order);
 
+        $existingBot = BotName::find($orderCategory);
+        if ($existingBot && !empty($existingBot->bot_name)) {
+            return $existingBot->bot_name;
+        }
+
         $fallbackBotName = "Boltinator";
-        $openAiBotName = self::generateBotNameWithOpenAI($orderCategory);
+        $openAiBotName = $this->generateBotNameWithOpenAI($orderCategory);
+
+        if ($openAiBotName) {
+            //Cache for later use
+            BotName::create([
+                'category' => $orderCategory,
+                'bot_name' => $openAiBotName,
+            ]);
+        }
 
         return $openAiBotName ?? $fallbackBotName;
     }
