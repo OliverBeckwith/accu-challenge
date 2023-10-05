@@ -1,3 +1,16 @@
+# Accu Bot Factory Challenge
+
+This repository was bootstrapped with the Laravel [getting started command](https://laravel.com/docs/10.x/installation). 
+
+## Getting Started
+To get started, we'll need the typical Laravel environment vars in `.env`. Additionally, this repository makes use of OpenAI GPT-3.5, so add a `OPENAI_API_KEY` variable to `.env` (this can be obtained [here](https://platform.openai.com/account/api-keys)).
+
+We can then run the `./vendor/bin/sail up -d` command to start the docker containers. Then we can run the migrations with `./vendor/bin/sail artisan migrate` to create the appropriate database tables.
+
+Next we need to import the data necessary for the application. For this, we should run `./vendor/bin/sail artisan app:import-orders resources/csv/orders.csv`, and `./vendor/bin/sail artisan app:import-products`. Optionally we can run `./vendor/bin/sail artisan app:generate-bots` to mass generate bot names for orders (otherwise will generate on the fly causing slower page loads).
+
+The orders list can be seen at `/orders`, with individual order details pages being at `/orders/{id}`.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
