@@ -85,7 +85,7 @@ class BotNameGenerator
             return $existingBot->bot_name;
         }
 
-        $fallbackBotName = "Boltinator";
+        $fallbackBotName = self::FALLBACK_BOT_NAMES[random_int(0, count(self::FALLBACK_BOT_NAMES) - 1)];
         $openAiBotName = $this->client ? $this->generateBotNameWithOpenAI($orderCategory) : null;
 
         if ($openAiBotName) {
