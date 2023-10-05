@@ -10,15 +10,10 @@ use OpenAI;
 
 class BotNameGenerator
 {
-    private Client $client;
-
-    public function __construct()
-    {
-        $this->client = OpenAI::client(env("OPENAI_API_KEY"));
-    }
+    private const CLIENT = OpenAI::client(env("OPENAI_API_KEY"));
 
     /** Retrieve the most prevalent category from the order items */
-    protected function getOrderCategory(Order $order)
+    protected static function getOrderCategory(Order $order)
     {
         $productCategories = [];
         foreach ($order->orderItems as $orderItem) {
@@ -40,9 +35,9 @@ class BotNameGenerator
     }
 
     /** Use OpenAI GPT 3.5 to generate an amusing bot name */
-    protected function generateBotNameWithOpenAI(string $category): string|null
+    protected static function generateBotNameWithOpenAI(string $category): string|null
     {
-        $chatResponse = $this->client->chat()->create([
+        $chatResponse = self::CLIENT->chat()->create([
             'model' => 'gpt-3.5-turbo',
             'prompt' => "Generate a single word amusing robot name loosely based on the following category: '$category'" . PHP_EOL
                 . "(Examples: 'Boltinator', 'Nutbuster', 'Washzilla')" . PHP_EOL
@@ -59,12 +54,12 @@ class BotNameGenerator
     }
 
     /** Generate a bot name for the given order */
-    public function generate(Order $order)
+    public static function generate(Order $order)
     {
-        $orderCategory = $this->getOrderCategory($order);
+        $orderCategory = self::getOrderCategory($order);
 
         $fallbackBotName = "Boltinator";
-        $openAiBotName = $this->generateBotNameWithOpenAI($orderCategory);
+        $openAiBotName = self::generateBotNameWithOpenAI($orderCategory);
 
         return $openAiBotName ?? $fallbackBotName;
     }
