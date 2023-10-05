@@ -22,7 +22,7 @@ class Order extends Model
     public function getTotalWeight()
     {
         return $this->orderItems->sum(
-            fn ($orderItem) => ($orderItem->weight ?? 0) * ($orderItem->quantity ?? 1)
+            fn ($orderItem) => ($orderItem->product->weight ?? 0) * ($orderItem->quantity ?? 1)
         );
     }
 
