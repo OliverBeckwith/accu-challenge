@@ -34,6 +34,7 @@ class Order extends Model
         $botGenerator = resolve(BotNameGenerator::class);
         $botName = $botGenerator->generate($this);
         $this->bot_name = $botName;
+        $this->save();
         return $botName;
     }
 }
