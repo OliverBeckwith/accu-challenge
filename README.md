@@ -5,11 +5,13 @@ This repository was bootstrapped with the Laravel [getting started command](http
 ## Getting Started
 To get started, we'll need the typical Laravel environment vars in `.env`. Additionally, this repository makes use of OpenAI GPT-3.5, so add a `OPENAI_API_KEY` variable to `.env` (this can be obtained [here](https://platform.openai.com/account/api-keys)).
 
-We can then run the `./vendor/bin/sail up -d` command to start the docker containers. Then we can run the migrations with `./vendor/bin/sail artisan migrate` to create the appropriate database tables.
+We can then run the `./vendor/bin/sail up -d` command to start the docker containers. Then we can run the migrations with `./vendor/bin/sail artisan migrate` to create the appropriate database tables. The frontend needs `vite` to be running in order to compile the `tailwind` styling, so we also need to run `./vendor/bin/sail npm run dev`.
 
 Next we need to import the data necessary for the application. For this, we should run `./vendor/bin/sail artisan app:import-orders resources/csv/orders.csv`, and `./vendor/bin/sail artisan app:import-products`. Optionally we can run `./vendor/bin/sail artisan app:generate-bots` to mass generate bot names for orders (otherwise will generate on the fly causing slower page loads).
 
 The orders list can be seen at `/orders`, with individual order details pages being at `/orders/{id}`.
+
+The authentication is bootstrapped from `laravel/ui` with `artisan ui bootstrap --auth` and then the layout, login, and registration views were tweaked to use `tailwind` styling as the combination of `Bootstrap` and `tailwind` was causing visual bugs and I am more familiar with `tailwind`.
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
