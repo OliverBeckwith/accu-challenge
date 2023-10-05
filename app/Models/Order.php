@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\BotNameGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,5 +24,15 @@ class Order extends Model
         return $this->orderItems->sum(
             fn ($orderItem) => ($orderItem->weight ?? 0) * ($orderItem->quantity ?? 1)
         );
+    }
+
+    /** Get's the bot name for this order. If not present, generates one. */
+    public function getBotName()
+    {
+        if ($this->bot_name) return $this->bot_name;
+
+        $botName = BotNameGenerator::generate($this);
+        $this->bot_name = $botName;
+        return $botName;
     }
 }
